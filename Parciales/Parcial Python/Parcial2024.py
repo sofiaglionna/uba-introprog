@@ -131,37 +131,40 @@ def tiempo_mas_rapido (tiempos_salas: list[int])-> int:
 
 # 3
 
-# Este ejercicio está mal. Lo dejo acá en caso de que sirva como guía para hacerlo bien.
+def rachas(tiempos_salas:list[int]) -> list[tuple[int,int]]:
+    indicede_inicio:int = 0
+    indicede_final:int = 0
+    contador:int = 0
 
-def racha_mas_larga (tiempos: list[int])-> tuple[int, int]:
-  indiceActual:int = 0
-  maxActual:int = 0
-  maxTemporal:int = 0
-  i:int = 0
-  res:tuple[int, int] = ()
+    lista_de_tuplas:list[tuple[int,int]] = []
 
-  while i < len(tiempos):
-    if 0 < tiempos[i] < 61 and indiceActual==0:
-      indiceActual = i
-      maxTemporal += 1
-      i += 1
-    elif 0 < tiempos[i] < 61 and indiceActual!=0:
-      maxTemporal += 1
-      i += 1
-    elif maxActual < maxTemporal: 
-      indiceActual = maxTemporal
-      maxTemporal = 0
-      indiceActual = i - maxActual
-    elif 0 < tiempos[i] < 61 and indiceActual + maxTemporal < i:
-      indiceActual = i
-      maxTemporal += 1
-      i += 1
-    else:
-        i += 1
+    while contador < len(tiempos_salas):
+        indicede_final = contador
+        if tiempos_salas[contador] == 0 or tiempos_salas[contador] == 61:
+            if indicede_inicio != indicede_final:
+                lista_de_tuplas.append((indicede_inicio,indicede_final-1))
+        
+            indicede_inicio = contador + 1
+        elif contador == len(tiempos_salas) - 1:
+            lista_de_tuplas.append((indicede_inicio,indicede_final))
 
-    res = (indiceActual, indiceActual+maxActual)
+        contador += 1
 
-  return res
+    return lista_de_tuplas
+
+def racha_mas_larga(tiempos_salas:list[int]) -> tuple[int,int]:
+    indices_de_rachas:list[tuple[int,int]] = rachas(tiempos_salas)
+    contador:int = 0
+    rachamasgrande:int = 0
+    racha_mas_larga:int = indices_de_rachas[0]
+
+    while contador < len(indices_de_rachas):
+        tupla = indices_de_rachas[contador]
+        if (tupla[1] - tupla[0]) > rachamasgrande:
+            rachamasgrande = (tupla[1] - tupla[0])
+            racha_mas_larga = tupla
+        contador +=1
+    return racha_mas_larga
 
 
 # 4
